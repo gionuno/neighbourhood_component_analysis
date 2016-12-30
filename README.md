@@ -3,3 +3,4 @@ MATLAB code for Neighbourhood Component Analysis, based on Jacob Goldberger, Sam
 
 ![image](res.jpg)
 
+The blue dots are the projections (Y = AX) of faces, while yellow dots are nonfaces. So this can be used for clustering.
