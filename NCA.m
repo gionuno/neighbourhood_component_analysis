@@ -1,15 +1,19 @@
-function A = NCA(X,C,K,T,dt)
-    A = randn(K,size(X,1));
+function A = NCA(X,C,D,T,dt)
+    A = 1e-1*randn(size(X,2),D);
+    sA = zeros(size(A));
+    dA = zeros(size(A));
+    
     for t = 1:T
         disp(t);
-        AX = A*X;
-        dG = zeros([size(X,1),size(X,1)]);
-        p_i  = zeros(size(X,2));
-        p_Ci = zeros(size(X,2));
-        for i = 1:size(X,2)
-            for j = 1:size(X,2)
+        AX = X*A;
+        dG = zeros([size(X,2),size(X,2)]);
+        p_i  = zeros([size(X,1),1]);
+        p_Ci = zeros([size(X,1),1]);
+        F = 0.0;
+        for i = 1:size(X,1)
+            for j = 1:size(X,1)
                 if i ~= j
-                    p_i(j) = exp(-norm(AX(:,i)-AX(:,j)));
+                    p_i(j) = exp(-norm(AX(i,:)-AX(j,:)).^2);
                 else
                     p_i(j) = 0.0;
                 end
@@ -20,11 +24,17 @@ function A = NCA(X,C,K,T,dt)
                 end
             end
             p_i = p_i/sum(p_i);
-            p_Ci = p_Ci/sum(p_Ci);
-            X_i = repmat(X(:,i),[1,size(X,2)])-X;
+            F = ((i-1)*F+sum(p_Ci))/i; 
+            p_Ci = p_Ci / sum(p_Ci);
+            X_i = repmat(X(i,:),[size(X,1),1])-X;
             p = p_i - p_Ci;
-            dG = dG + X_i*diag(p)*X_i';
+            dG = dG + X_i'*diag(p)*X_i;
         end
-        A = A + dt*2.0*A*dG;
+        disp(F);
+        dG = dG*A;
+        beta = sum(sum(dG.^2))/(sum(sum(dA.^2))+1e-2);
+        sA = dG + beta*sA;
+        dA = dG;
+        A = A + dt*sA;
     end
 end
