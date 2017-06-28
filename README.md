@@ -7,4 +7,6 @@ The blue dots are the projections (Y = AX) of faces, while yellow dots are nonfa
 
 ![image](res_coil.jpg)
 
-COIL100 example. Non linear conjugate gradient update.
+COIL100 example. 
+
+Now with a 'faster' version, that uses a stochastic batch update per element, and a non-linear conjugate gradient update.

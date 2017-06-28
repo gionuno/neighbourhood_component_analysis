@@ -70,14 +70,14 @@ for i = 3:length(DIR)
 end
 
 
-[A,E] = fast_NCA(X,C,3,4*size(X,1),50,5e-2);
+[A,E] = fast_NCA(X,C,3,2*size(X,1),10,1e-1);
 Y = X*A;
 
 figure;
 plot(E);
 
 figure;
-a = A(:,1);
+a = A(:,3);
 a = (a-min(a))/(max(a)-min(a));
 imshow(reshape(a,d));
 
